@@ -2,6 +2,7 @@ import { validateRows } from "./row-model.js";
 
 const TOKEN_KEY = "senna:github-token:v1";
 const OWNER_KEY = "senna:github-owner:v1";
+const SHA_KEY = "senna:github-sha:v1";
 const API_VERSION = "2026-03-10";
 const API_ROOT = "https://api.github.com";
 
@@ -42,7 +43,7 @@ export function createGitHubSync({
 }) {
   let token = storage.getItem(TOKEN_KEY);
   let owner = storage.getItem(OWNER_KEY);
-  let retainedSha = null;
+  let retainedSha = storage.getItem(SHA_KEY);
   let saveQueue = Promise.resolve();
 
   const request = async (path, options = {}, requestToken = token) => {
@@ -83,6 +84,7 @@ export function createGitHubSync({
     retainedSha = remote.sha;
     storage.setItem(TOKEN_KEY, token);
     storage.setItem(OWNER_KEY, owner);
+    storage.setItem(SHA_KEY, retainedSha);
     return remote.rows;
   };
 
@@ -92,6 +94,7 @@ export function createGitHubSync({
     retainedSha = null;
     storage.removeItem(TOKEN_KEY);
     storage.removeItem(OWNER_KEY);
+    storage.removeItem(SHA_KEY);
   };
 
   const isConnected = () => Boolean(token && owner);
@@ -100,6 +103,7 @@ export function createGitHubSync({
     if (!isConnected()) throw new GitHubAuthError("GitHub is not connected");
     const remote = await readContents(owner);
     retainedSha = remote.sha;
+    storage.setItem(SHA_KEY, retainedSha);
     return remote.rows;
   };
 
@@ -128,6 +132,7 @@ export function createGitHubSync({
     if (!response.ok) throw errorForStatus(response.status);
     const body = await response.json();
     retainedSha = body.content.sha;
+    storage.setItem(SHA_KEY, retainedSha);
     return retainedSha;
   };
 

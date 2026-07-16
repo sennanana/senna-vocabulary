@@ -93,3 +93,26 @@ test("save refuses a stale remote sha", async () => {
 
   await assert.rejects(() => sync.save([]), GitHubConflictError);
 });
+
+test("save keeps conflict protection after the client is recreated", async () => {
+  const local = storage();
+  local.setItem("senna:github-token:v1", "github_pat_test");
+  local.setItem("senna:github-owner:v1", "senna");
+  let sha = "one";
+  const fetchImpl = async () =>
+    response(200, { sha, content: btoa("[]") });
+  const first = createGitHubSync({
+    repo: "senna-vocabulary",
+    storage: local,
+    fetchImpl,
+  });
+  await first.load();
+  sha = "changed-after-reload";
+  const second = createGitHubSync({
+    repo: "senna-vocabulary",
+    storage: local,
+    fetchImpl,
+  });
+
+  await assert.rejects(() => second.save([]), GitHubConflictError);
+});
