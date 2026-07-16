@@ -19,6 +19,17 @@ test("dirty local recovery wins over bundled rows", () => {
   assert.equal(state.isDirty(), true);
 });
 
+test("empty dirty recovery does not hide bundled rows", () => {
+  const storage = memoryStorage();
+  const state = createLocalState({ storage, key: "test" });
+  state.write([]);
+
+  const loaded = state.load([{ word: "remote" }]);
+
+  assert.equal(loaded.rows[0].word, "remote");
+  assert.equal(loaded.dirty, false);
+});
+
 test("markClean does not clear a newer local mutation", () => {
   const storage = memoryStorage();
   const state = createLocalState({ storage, key: "test" });

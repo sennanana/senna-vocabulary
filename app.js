@@ -23,7 +23,7 @@ export function createLocalState({
 
   const load = (fallbackRows) => {
     const cached = read();
-    if (cached?.dirty) return cached;
+    if (cached?.dirty && cached.rows.some((row) => row.word)) return cached;
     return {
       rows: validateRows(fallbackRows),
       dirty: false,
