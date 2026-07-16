@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+    <title>生词记录表</title>
+    <link rel="stylesheet" href="./teaching.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="sheet" aria-labelledby="title">
+        <header class="topline">
+          <div>
+            <h1 id="title">生词记录表</h1>
+            <p class="subtitle">SENNA · PERSONAL VOCABULARY</p>
+          </div>
+          <div class="meta">
+            <div>姓名：SENNA</div>
+            <div>语言：英语</div>
+            <div>存储：GitHub</div>
+          </div>
+        </header>
+
+        <div class="principles" aria-label="记录原则">
+          <div class="principle">
+            <strong>先回忆</strong>
+            <span>看到答案前，先试着说出意思或用法。</span>
+          </div>
+          <div class="principle">
+            <strong>隔天再见</strong>
+            <span>新词隔一段时间回来，记忆更稳。</span>
+          </div>
+          <div class="principle">
+            <strong>带语境</strong>
+            <span>词、例句、搭配一起记，之后更会用。</span>
+          </div>
+        </div>
+
+        <div class="syncbar" aria-label="GitHub 同步">
+          <span id="sync-status" class="sync-status" data-state="disconnected" role="status" aria-live="polite">未连接</span>
+          <button type="button" class="secondary" id="connect-github">连接 GitHub</button>
+          <button type="button" class="secondary" id="retry-sync" hidden>重试</button>
+          <button type="button" class="secondary" id="load-cloud" hidden>加载云端</button>
+          <button type="button" class="secondary" id="disconnect-github" hidden>断开 GitHub</button>
+        </div>
+
+        <div class="toolbar">
+          <button type="button" id="add-row">添加一行</button>
+          <button type="button" class="secondary" id="export-csv">导出 CSV</button>
+          <button type="button" class="secondary" id="export-json">导出 JSON</button>
+          <button type="button" class="secondary" id="print-page">打印</button>
+          <button type="button" class="danger" id="clear-all">清空</button>
+          <input type="search" id="filter" aria-label="筛选词表" placeholder="筛选生词、意思、来源">
+        </div>
+
+        <div class="table-wrap">
+          <table id="vocab-table">
+            <thead>
+              <tr>
+                <th scope="col">日期</th>
+                <th scope="col">生词/短语</th>
+                <th scope="col">发音</th>
+                <th scope="col">词性</th>
+                <th scope="col">核心义</th>
+                <th scope="col">例句/语境</th>
+                <th scope="col">搭配/词族</th>
+                <th scope="col">来源</th>
+                <th scope="col">第1次回忆</th>
+                <th scope="col">熟悉度</th>
+                <th scope="col">下次复习</th>
+                <th scope="col">备注</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="print-lines" aria-label="复盘">
+          <div class="line-field">本周最容易忘：____________________________</div>
+          <div class="line-field">下次优先复习：____________________________</div>
+        </div>
+
+        <aside class="sources">
+          <h2>依据</h2>
+          <ul>
+            <li><a href="https://www.learningscientists.org/retrieval-practice">Retrieval Practice</a>：先回忆再查看答案。</li>
+            <li><a href="https://www.learningscientists.org/spaced-practice">Spaced Practice</a>：复习日期拉开间隔。</li>
+            <li><a href="https://vli-journal.org/wp/wp-content/uploads/2021/08/VLI_9_2_9_wilkinson.pdf">Deliberate Vocabulary Learning from Word Cards</a>：词卡可包含词义、发音、例句、搭配，并配合反复复习。</li>
+          </ul>
+        </aside>
+      </section>
+    </main>
+
+    <dialog id="github-dialog" aria-labelledby="github-dialog-title">
+      <form method="dialog" id="github-form">
+        <h2 id="github-dialog-title">连接 GitHub</h2>
+        <p>令牌会长期保存在此浏览器。请只授权 <strong>senna-vocabulary</strong> 仓库的 Contents 读写权限，并设置有效期。</p>
+        <label for="github-token">Fine-grained Token</label>
+        <input id="github-token" name="token" type="password" autocomplete="off" required>
+        <p id="github-error" class="dialog-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button type="button" class="secondary" id="cancel-connect">取消</button>
+          <button type="submit" id="confirm-connect">连接</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
