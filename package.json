@@ -1,0 +1,10 @@
+{
+  "name": "senna-vocabulary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate:data": "node -e \"import('./row-model.js').then(async ({validateRows}) => { const {readFile} = await import('node:fs/promises'); validateRows(JSON.parse(await readFile('vocabulary.json', 'utf8'))); console.log('vocabulary.json valid'); })\""
+  }
+}
