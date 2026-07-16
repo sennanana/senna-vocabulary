@@ -33,7 +33,7 @@ test("connect stores a valid token and authenticated owner", async () => {
     storage: local,
   });
 
-  await sync.connect("github_pat_test");
+  await sync.connect("test-token");
 
   assert.equal(sync.isConnected(), true);
   assert.equal(local.getItem("senna:github-owner:v1"), "senna");
@@ -53,7 +53,7 @@ test("connect rejects invalid credentials without persisting them", async () => 
 
 test("save updates vocabulary.json with the current sha", async () => {
   const local = storage();
-  local.setItem("senna:github-token:v1", "github_pat_test");
+  local.setItem("senna:github-token:v1", "test-token");
   local.setItem("senna:github-owner:v1", "senna");
   const requests = [];
   const fetchImpl = async (url, options = {}) => {
@@ -79,7 +79,7 @@ test("save updates vocabulary.json with the current sha", async () => {
 
 test("save refuses a stale remote sha", async () => {
   const local = storage();
-  local.setItem("senna:github-token:v1", "github_pat_test");
+  local.setItem("senna:github-token:v1", "test-token");
   local.setItem("senna:github-owner:v1", "senna");
   let sha = "one";
   const sync = createGitHubSync({
@@ -96,7 +96,7 @@ test("save refuses a stale remote sha", async () => {
 
 test("save keeps conflict protection after the client is recreated", async () => {
   const local = storage();
-  local.setItem("senna:github-token:v1", "github_pat_test");
+  local.setItem("senna:github-token:v1", "test-token");
   local.setItem("senna:github-owner:v1", "senna");
   let sha = "one";
   const fetchImpl = async () =>
